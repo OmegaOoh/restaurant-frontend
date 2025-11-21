@@ -1,39 +1,61 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import api from '../api/axios'
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/axios";
 
 export default function Restaurant() {
-  const [restaurants, setRestaurants] = useState([])
-  const [loading, setLoading] = useState(true)
-  const navigate = useNavigate()
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function init() {
       try {
-        const res = await api.get('/api/restaurants')
-        setRestaurants(res.data.content)
+        // Fetch user data
+        const me = await api.get("/api/auth/me");
+        setUser(me.data);
 
+        // Fetch restaurant data
+        const res = await api.get("/api/restaurants");
+        setRestaurants(res.data.content);
       } catch (error) {
-        console.error(error)
-        navigate('/login') // if not authenticated, go to login
+        console.error(error);
+        navigate("/login"); // if not authenticated, go to login
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    init()
-  }, [navigate])
+    init();
+  }, [navigate]);
+
+  async function handleLogout() {
+    try {
+      await api.post("/api/auth/logout");
+    } catch (_) {}
+    navigate("/login");
+  }
 
   if (loading) {
-    return <div style={{ padding: '2rem' }}>Loading...</div>
+    return <div style={{ padding: "2rem" }}>Loading...</div>;
   }
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: "2rem" }}>
       <h1>Restaurant List</h1>
-      <table border="1" cellPadding="8" style={{ marginTop: '1rem', borderCollapse: 'collapse' }}>
+      <p>
+        Welcome, <strong>{user.name}</strong>
+      </p>
+      <button onClick={handleLogout} style={{ marginBottom: "1rem" }}>
+        Logout
+      </button>
+      <table
+        border="1"
+        cellPadding="8"
+        style={{ marginTop: "1rem", borderCollapse: "collapse" }}
+      >
         <thead>
-          <tr style={{ background: '#aaa' }}>
+          <tr style={{ background: "#aaa" }}>
             <th>Name</th>
             <th>Rating</th>
             <th>Location</th>
@@ -49,7 +71,6 @@ export default function Restaurant() {
           ))}
         </tbody>
       </table>
-
     </div>
-  )
+  );
 }
