@@ -46,7 +46,7 @@ export default function Restaurant() {
     <div style={{ padding: "2rem" }}>
       <h1>Restaurant List</h1>
       <p>
-        Welcome, <strong>{user.name}</strong>
+        Welcome, <strong>{user.username}</strong>
       </p>
       <button onClick={handleLogout} style={{ marginBottom: "1rem" }}>
         Logout
