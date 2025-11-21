@@ -32,7 +32,9 @@ export default function Restaurant() {
   async function handleLogout() {
     try {
       await api.post("/api/auth/logout");
-    } catch (_) {}
+    } catch (error) {
+      console.error(error);
+    }
     navigate("/login");
   }
 
