@@ -19,6 +19,22 @@ export default function Restaurant() {
     }
   }
 
+  function getButtons(role) {
+    let components = [
+      <button key="logout" onClick={handleLogout}>
+        Logout
+      </button>,
+    ];
+    if (role === "ROLE_ADMIN") {
+      components.push(
+        <button key="add-restaurant" onClick={() => navigate("/new")}>
+          Add Restaurant
+        </button>,
+      );
+    }
+    return components;
+  }
+
   useEffect(() => {
     async function init() {
       try {
@@ -72,9 +88,16 @@ export default function Restaurant() {
       >
         {getRole(user.role)}
       </p>
-      <button onClick={handleLogout} style={{ marginBottom: "1rem" }}>
-        Logout
-      </button>
+      <div
+        style={{
+          display: "flex",
+          gap: "0.5rem",
+          flexFlow: "row wrap",
+          maxWidth: "80vw",
+        }}
+      >
+        {getButtons(user.role)}
+      </div>
       <table
         border="1"
         cellPadding="8"
