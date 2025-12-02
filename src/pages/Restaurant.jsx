@@ -8,6 +8,17 @@ export default function Restaurant() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  function getRole(role_str) {
+    switch (role_str) {
+      case "ROLE_ADMIN":
+        return "Admin";
+      case "ROLE_USER":
+        return "User";
+      default:
+        return "Unknown";
+    }
+  }
+
   useEffect(() => {
     async function init() {
       try {
@@ -47,6 +58,19 @@ export default function Restaurant() {
       <h1>Restaurant List</h1>
       <p>
         Welcome, <strong>{user.username}</strong>
+      </p>
+      <p
+        style={{
+          fontSize: "0.75rem",
+          width: "fit-content",
+          padding: "5px 20px",
+          borderRadius: "9999px",
+          textTransform: "uppercase",
+          backgroundColor: "rgba(255, 255, 255, 0.1)",
+          border: "1px solid rgba(255, 255, 255, 0.5)",
+        }}
+      >
+        {getRole(user.role)}
       </p>
       <button onClick={handleLogout} style={{ marginBottom: "1rem" }}>
         Logout
